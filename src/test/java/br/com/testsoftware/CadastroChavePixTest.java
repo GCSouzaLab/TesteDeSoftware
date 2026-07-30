@@ -5,7 +5,11 @@ import org.junit.Test;
 public class CadastroChavePixTest {
 
     @Test
-    public void cadastroChavePixCPFValido(){}
+    public void cadastroChavePixCPFValido(){
+        String cpfValido = "";
+
+
+    }
 
     @Test
     public void cadastroChavePixCNPJInvalido(){}
