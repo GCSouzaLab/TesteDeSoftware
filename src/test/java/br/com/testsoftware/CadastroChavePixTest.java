@@ -2,7 +2,7 @@ package br.com.testsoftware;
 
 import org.junit.Test;
 
-class CadastroChavePixTest {
+public class CadastroChavePixTest {
 
     @Test
     public void cadastroChavePixCPFValido(){}
