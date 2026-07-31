@@ -4,7 +4,6 @@ public class ValidadorChavePIX {
 
     String chavePix;
 
-    private static final String CNPJ_SEGURO_PATTERN = "(^\\d{14}$)|(^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$)";
     private static final String CNPJ_PATTERN = "[A-Z0-9]{12}[0-9]{2}";
     private static final int[] PESOS_PRIMEIRO_DIGITO = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
     private static final int[] PESOS_SEGUNDO_DIGITO = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
@@ -18,13 +17,13 @@ public class ValidadorChavePIX {
 
         cpf = cpf.replace(".", "");
         cpf = cpf.replace("-", "");
-        if (cpf.length()!=11) {
+        if (cpf.length() != 11) {
             throw new IllegalArgumentException("O CPF está inválido! Informe um novo CPF.");
         }
         for (int i = 1; i < 11; i++) {
-            if (cpf.charAt(i)!= cpf.charAt(i-1)) {
+            if (cpf.charAt(i) != cpf.charAt(i - 1)) {
                 break;
-            }else if (i==10) {
+            } else if (i == 10) {
                 throw new IllegalArgumentException("O CPF está inválido! Informe um novo CPF.");
             }
         }
@@ -33,27 +32,27 @@ public class ValidadorChavePIX {
         int Dv2 = 0;
         String Dv = cpf.substring(10);
         for (int i = 0; i < 9; i++) {
-            soma += (10-i)*Character.getNumericValue(cpf.charAt(i));
+            soma += (10 - i) * Character.getNumericValue(cpf.charAt(i));
             System.out.println(soma);
         }
-        Dv1 = soma%11;
+        Dv1 = soma % 11;
         if (Dv1 < 2) {
             Dv1 = 0;
         } else {
-            Dv1 = 11-Dv1;
+            Dv1 = 11 - Dv1;
         }
         System.out.println(Dv1);
-        soma=0;
-        cpf = cpf.substring(0,9);
-        String cpfDv2 =cpf + Dv1;
+        soma = 0;
+        cpf = cpf.substring(0, 9);
+        String cpfDv2 = cpf + Dv1;
         for (int i = 0; i < cpfDv2.length(); i++) {
-            soma += (11-i)*Character.getNumericValue(cpfDv2.charAt(i));
+            soma += (11 - i) * Character.getNumericValue(cpfDv2.charAt(i));
         }
-        Dv2 = soma%11;
+        Dv2 = soma % 11;
         if (Dv2 < 2) {
             Dv2 = 0;
         } else {
-            Dv2 = 11-Dv2;
+            Dv2 = 11 - Dv2;
         }
         System.out.println(Dv2);
         cpf += Dv1;
