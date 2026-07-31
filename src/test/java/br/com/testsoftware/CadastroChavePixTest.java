@@ -15,8 +15,14 @@ public class CadastroChavePixTest {
         Assert.assertTrue(isCPFValido);
     }
 
-    @Test
-    public void cadastroChavePixCNPJInvalido(){}
+    @Test()
+    public void cadastroChavePixCNPJInvalido() {
+        ValidadorChavePIX validador = new ValidadorChavePIX("00.000.0001/0000-00");
+
+        boolean isCnpjValido = validador.validarCNPJ();
+
+        Assert.assertFalse(isCnpjValido);
+    }
 
     @Test
     public void tentativaCadastroEntradaMaliciosa(){
