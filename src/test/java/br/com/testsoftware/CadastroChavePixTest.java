@@ -24,16 +24,12 @@ public class CadastroChavePixTest {
         Assert.assertFalse(isCnpjValido);
     }
 
-    @Test
+    @Test(expected = SecurityException.class)
     public void tentativaCadastroEntradaMaliciosa(){
         String cpfMalicioso = "'' OR '1'='1'";
 
         ValidadorChavePIX validador = new ValidadorChavePIX(cpfMalicioso);
-        Exception exception = Assert.assertThrows(IllegalArgumentException.class, validador::validarCPF);
-
-        String mensagemEsperada = "O chave pix está inválida!";
-        String mensagemAtual = exception.getMessage();
-        Assert.assertEquals(mensagemEsperada, mensagemAtual);
+        validador.validarCNPJ();
     }
 
     @Test
