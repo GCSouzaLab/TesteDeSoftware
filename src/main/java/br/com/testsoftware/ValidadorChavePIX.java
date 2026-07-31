@@ -118,7 +118,7 @@ public class ValidadorChavePIX {
 
         String entrada = chavePix.trim();
 
-        if (!entrada.matches("[A-Za-z0-9./-]+")) {
+        if (!entrada.matches("^[A-Za-z0-9./-]+$")) {
             throw new SecurityException(
                     "A chave PIX está inválida!"
             );
