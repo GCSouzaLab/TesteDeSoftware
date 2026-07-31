@@ -5,6 +5,9 @@ public class ValidadorChavePIX {
     String chavePix;
 
     private static final String CNPJ_SEGURO_PATTERN = "(^\\d{14}$)|(^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$)";
+    private static final String CNPJ_PATTERN = "[A-Z0-9]{12}[0-9]{2}";
+    private static final int[] PESOS_PRIMEIRO_DIGITO = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+    private static final int[] PESOS_SEGUNDO_DIGITO = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 
     public ValidadorChavePIX(String chavePix) {
         this.chavePix = chavePix;
@@ -65,17 +68,61 @@ public class ValidadorChavePIX {
     }
 
     public boolean validarCNPJ() {
-        if (chavePix == null || !chavePix.matches(CNPJ_SEGURO_PATTERN))
-            throw new SecurityException();
 
-        String chaveNormalizada = normalizarChave(this.chavePix);
+        verificarEntradaMaliciosa();
 
+        String cnpj = normalizarChave(chavePix);
 
+        if (!cnpj.matches(CNPJ_PATTERN)) {
+            return false;
+        }
 
-        return true;
+        String baseCnpj = cnpj.substring(0, 12);
+        String digitosInformados = cnpj.substring(12, 14);
+
+        int primeiroDigitoCalculado = calcularDigitoCNPJ(baseCnpj, PESOS_PRIMEIRO_DIGITO);
+
+        int segundoDigitoCalculado = calcularDigitoCNPJ(baseCnpj + primeiroDigitoCalculado, PESOS_SEGUNDO_DIGITO);
+
+        String digitosCalculados = "" + primeiroDigitoCalculado + segundoDigitoCalculado;
+
+        return digitosCalculados.equals(digitosInformados);
     }
 
     private String normalizarChave(String cnpjComMascara) {
-        return cnpjComMascara.replaceAll("\\D", "");
+        return cnpjComMascara.trim().toUpperCase().replace(".", "").replace("/", "").replace("-", "");
+    }
+
+    private int calcularDigitoCNPJ(String base, int[] pesos) {
+        int soma = 0;
+
+        for (int i = 0; i < base.length(); i++) {
+            char caractere = base.charAt(i);
+            int valor = caractere - '0';
+
+            soma = soma + valor * pesos[i];
+        }
+
+        int resto = soma % 11;
+
+        if (resto == 0 || resto == 1) {
+            return 0;
+        }
+
+        return 11 - resto;
+    }
+
+    private void verificarEntradaMaliciosa() {
+        if (chavePix == null) {
+            return;
+        }
+
+        String entrada = chavePix.trim();
+
+        if (!entrada.matches("[A-Za-z0-9./-]+")) {
+            throw new SecurityException(
+                    "A chave PIX está inválida!"
+            );
+        }
     }
 }
